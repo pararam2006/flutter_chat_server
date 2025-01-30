@@ -15,6 +15,10 @@ const io = socketIo(server, {
 
 app.use(cors());
 
+app.get('/', (req, res) => {
+    res.send('Сервер работает!');
+});
+
 let users = []; // Массив для хранения пользователей
 let messages = []; // Массив для хранения сообщений
 
