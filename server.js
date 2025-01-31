@@ -8,17 +8,17 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 io.on('connection', (socket) => {
-    console.log('user connected')
+    console.log('Пользователь присоединился')
 
     socket.on('first', () => {
         console.log('first')
-        io.emit('response', 'first button was pressed')
+        io.emit('response', 'Нажата первая кнопка')
     })
 
     socket.on('second', (data) => {
         console.log('second')
         console.log(`data: ${data}`)
-        io.emit('response', 'second button was pressed')
+        io.emit('response', 'Нажата вторая кнопка')
     })
 
     socket.on('disconnect', () => {
