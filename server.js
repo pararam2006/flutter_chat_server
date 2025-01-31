@@ -7,28 +7,6 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// io.on('connection', (socket) => {
-//     console.log('Пользователь присоединился');
-
-//     socket.on('first', () => {
-//         console.log('First button pressed');
-//         io.emit('response', 'First button was pressed');
-//     });
-
-//     socket.on('second', () => {
-//         console.log('Second button pressed');
-//         io.emit('response', 'Second button was pressed');
-//     });
-
-//     socket.on('disconnect', () => {
-//         console.log('Пользователь отсоединился');
-//     });
-// });
-
-// server.listen(3000, () => {
-//     console.log('Server is running on https://flutter-chat-server-q7ne.onrender.com:3000');
-// });
-
 io.on('connection', (socket) => {
     console.log('user connected')
 
@@ -37,8 +15,9 @@ io.on('connection', (socket) => {
         io.emit('response', 'first button was pressed')
     })
 
-    socket.on('second', () => {
+    socket.on('second', (data) => {
         console.log('second')
+        console.log(`data: ${data}`)
         io.emit('response', 'second button was pressed')
     })
 
