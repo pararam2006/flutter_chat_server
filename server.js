@@ -15,9 +15,9 @@ io.on('connection', (socket) => {
         io.emit('response', 'Нажата первая кнопка')
     })
 
-    socket.on('second', (data) => {
+    socket.on('second', () => {
         console.log('second')
-        console.log(`data: ${data}`)
+        // console.log(`second, data: ${data}`)
         io.emit('response', 'Нажата вторая кнопка')
     })
 
