@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const server = http.createServer(app);
 const io = socketIo(server);
-const jsonParser = express.json();
+// const jsonParser = express.json();
 
 io.on('connection', (socket) => {
     
@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
         const filePath = path.join(__dirname, 'users.json');
     
         // Чтение файла users.json
-        fs.readFile(filePath, 'utf8', (err, data) => {
+        fs.readFileSync(filePath, 'utf8', (err, data) => {
             if (err) {
                 console.error('Ошибка чтения файла:', err);
                 response.status(500).send('Ошибка сервера');
@@ -47,14 +47,14 @@ io.on('connection', (socket) => {
             usersData.users.push(user);
     
             // Запись обновлённых данных обратно в файл
-            fs.writeFile(filePath, JSON.stringify(usersData, null, 2), 'utf8', (writeErr) => {
+            fs.writeFileSync(filePath, JSON.stringify(usersData, null, 2), 'utf8', (writeErr) => {
                 if (writeErr) {
                     console.error('Ошибка записи файла:', writeErr);
                     response.status(500).send('Ошибка сервера');
                     return;
                 }
     
-                console.log(`Пользователь ${user.userName} зарегистрирован`);
+                console.log(`Пользователь ${user.userName} с паролем ${user.password} и почтой ${user.email} зарегистрирован`);
                 response.status(200).send('Регистрация успешна');
             });
         });
