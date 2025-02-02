@@ -1,8 +1,11 @@
-const { Socket } = require('dgram');
+const db = getFirestore();
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-initializeApp();
-const db = getFirestore();
+const serviceAccount = require('./google-services.json');
+initializeApp({
+    credential: cert(serviceAccount),
+});
+const { Socket } = require('dgram');
 const http = require('http');
 const express = require('express');
 const path = require('path');
