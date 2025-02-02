@@ -11,8 +11,7 @@ const io = socketIo(server);
 
 io.on('connection', (socket) => {
     
-    socket.on('registerUser', (request, response) => {
-        const user = request.body;
+    socket.on('registerUser', (user) => {
         console.log(user.userName);
         console.log(user.email);
         console.log(user.password);
