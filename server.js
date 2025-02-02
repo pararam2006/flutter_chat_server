@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const server = http.createServer(app);
 const io = socketIo(server);
-// const jsonParser = express.json();
+const jsonParser = express.json();
 
 io.on('connection', (socket) => {
     
@@ -18,6 +18,7 @@ io.on('connection', (socket) => {
         console.log(user.email);
         console.log(user.password);
     });
+
 
     console.log('Пользователь присоединился');
 
