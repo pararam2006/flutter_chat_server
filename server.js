@@ -2,9 +2,11 @@ const { initializeApp, applicationDefault, cert } = require('firebase-admin/app'
 var admin = require("firebase-admin");
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-1cda350649.json');
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
+
 const db = getFirestore();
 const { Socket } = require('dgram');
 const http = require('http');
