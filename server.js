@@ -1,21 +1,46 @@
 const { Socket } = require('dgram');
-const express = require('express');
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+initializeApp();
+const db = getFirestore();
 const http = require('http');
-const socketIo = require('socket.io');
-const PORT = 3000;
-const app = express();
-const fs = require('fs');
+const express = require('express');
 const path = require('path');
-const server = http.createServer(app);
+const fs = require('fs');
+const socketIo = require('socket.io');
+const server = http.createServer(express());
 const io = socketIo(server);
+const PORT = 3000;
 
 io.on('connection', (socket) => {
     
-    socket.on('registerUser', (user) => {
-        console.log(user.userName);
-        console.log(user.email);
-        console.log(user.password);
+    socket.on('registerUser', async (user) => {
+        try {
+            // Проверка, существует ли пользователь
+            const userDoc = await db.collection('users').doc(user.userName).get();
+    
+            if (userDoc.exists) {
+                // Если пользователь уже существует, отправьте сообщение об ошибке
+                const errMsg = `Пользователь ${user.userName} уже зарегистрирован`;
+                io.emit('err', errMsg);
+                console.log(errMsg);
+                return; // Завершите выполнение функции
+            }
+    
+            // Если пользователь не существует, добавьте его в базу данных
+            await db.collection('users').doc(user.userName).set({
+                email: user.email,
+                password: user.password             
+            });
+            console.log(`Пользователь ${user.userName} зарегистрирован`);
+        } 
+        catch(err) {
+            const errMsg = `Ошибка при регистрации: ${err}`;
+            io.emit('err', errMsg);
+            console.log(errMsg);
+        }
     });
+    
 
     console.log('Пользователь присоединился');
 
