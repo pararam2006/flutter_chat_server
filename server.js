@@ -27,8 +27,7 @@ function addUserToFile(user) {
 
         const userExists = usersData.users.some((existingUser) => {existingUser.userName === user.userName});
         if (userExists) {
-            console.log(`Пользователь ${user.userName} уже зарегистрирован`);
-            console.log(`Текущие пользователи: \n${usersData}`)
+            console.log(`Пользователь ${user.userName} уже зарегистрирован. \n Текущие пользователи: \n${usersData}`);
             return;
         }
 
@@ -46,6 +45,23 @@ function addUserToFile(user) {
 
 io.on('connection', (socket) => {
     console.log('Пользователь присоединился');
+
+    socket.on('first', ()=>{
+        const filePath = path.join(__dirname, 'users.json');
+        if (err) {
+            console.error('Ошибка при чтении файла:', err);
+            return;
+        }
+        let usersData;
+        try {
+            usersData = JSON.parse(data);
+            console.log(`Текущие пользователи в файле: ${usersData}`)
+        } catch (parseErr) {
+            console.error('Ошибка при парсинге JSON:', parseErr);
+            return;
+        }
+        
+    });
 
     socket.on('registerUser', (user) => {
         console.log('Registering user:', user);
