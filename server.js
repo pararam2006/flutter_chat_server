@@ -17,6 +17,9 @@ const socketIo = require('socket.io');
 const server = http.createServer(express());
 const io = socketIo(server);
 const PORT = 3000;
+const docRef = db.collection('test').doc('testDoc');
+await docRef.set({ test: 'test' });
+console.log('Document written');
 
 io.on('connection', (socket) => {
     
