@@ -73,4 +73,4 @@ io.on('connection', (socket) => {
     });
 })
 
-server.listen(PORT, () => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com`)});
+server.listen(() => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com`)});
