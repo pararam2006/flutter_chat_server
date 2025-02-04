@@ -1,12 +1,13 @@
-const { initializeApp, applicationDefault, cert } = import('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue, Filter } = import('firebase-admin/firestore');
-var admin = import("firebase-admin");
-const serviceAccount = import('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json');
+const admin = require('firebase-admin');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
+
+const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json');
 
 console.log('Initializing Firebase with service account:', serviceAccount);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount )
+  credential: admin.credential.cert(serviceAccount)
 });
 
 const db = getFirestore();
@@ -18,9 +19,6 @@ const socketIo = require('socket.io');
 const server = http.createServer(express());
 const io = socketIo(server);
 const PORT = 3000;
-const docRef = db.collection('test').doc('testDoc');
-await docRef.set({ test: 'test' });
-console.log('Document written');
 
 io.on('connection', (socket) => {
     
@@ -52,11 +50,11 @@ io.on('connection', (socket) => {
 
     console.log('Пользователь присоединился');
 
-    socket.on('first', async () => {
+    socket.on('first', () => {
         console.log('first');
         try {
             const docRef = db.collection('test').doc('testDoc');
-            await docRef.set({ test: 'test' });
+            docRef.set({ test: 'test' });
             console.log('Запись без регистрации работает');
         } 
         catch (err){
