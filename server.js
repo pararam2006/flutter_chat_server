@@ -18,7 +18,6 @@ const path = require('path');
 const socketIo = require('socket.io');
 const server = http.createServer(express());
 const io = socketIo(server);
-const PORT = 3000;
 
 io.on('connection', (socket) => {
     
@@ -50,11 +49,11 @@ io.on('connection', (socket) => {
 
     console.log('Пользователь присоединился');
 
-    socket.on('first', () => {
+    socket.on('first', async () => {
         console.log('first');
         try {
             const docRef = db.collection('test').doc('testDoc');
-            docRef.set({ test: 'test' });
+            await docRef.set({ test: 'test' });
             console.log('Запись без регистрации работает');
         } 
         catch (err){
@@ -73,4 +72,4 @@ io.on('connection', (socket) => {
     });
 })
 
-server.listen(PORT, () => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com:${PORT}`)});
+server.listen(PORT, () => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com`)});
