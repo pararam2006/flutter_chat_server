@@ -1,7 +1,7 @@
 const { initializeApp, applicationDefault, cert } = import('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue, Filter } = import('firebase-admin/firestore');
-var admin = require("firebase-admin");
-const serviceAccount = require('');
+var admin = import("firebase-admin");
+const serviceAccount = import('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json');
 
 console.log('Initializing Firebase with service account:', serviceAccount);
 
@@ -10,11 +10,11 @@ admin.initializeApp({
 });
 
 const db = getFirestore();
-const { Socket } = require('dgram');
-const http = require('http');
-const express = require('express');
-const path = require('path');
-const socketIo = require('socket.io');
+const { Socket } = import('dgram');
+const http = import('http');
+const express = import('express');
+const path = import('path');
+const socketIo = import('socket.io');
 const server = http.createServer(express());
 const io = socketIo(server);
 const PORT = 3000;
