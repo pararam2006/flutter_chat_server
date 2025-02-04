@@ -20,6 +20,16 @@ const socketIo = require('socket.io');
 const server = http.createServer(express());
 const io = socketIo(server);
 
+const ntpClient = require('ntp-client');
+
+ntpClient.getNetworkTime("pool.ntp.org", 123, (err, date) => {
+    if (err) {
+        console.error("Ошибка при синхронизации времени:", err);
+        return;
+    }
+    console.log("Текущее время (синхронизировано с NTP):", date);
+});
+
 io.on('connection', (socket) => {
     
     socket.on('registerUser', async (user) => {
