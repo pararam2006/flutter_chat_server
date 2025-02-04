@@ -38,7 +38,7 @@ function addUserToFile(user) {
                 console.error('Ошибка при записи в файл:', writeErr);
                 return;
             }
-            console.log(`Пользователь ${user.userName} успешно зарегистрирован и записан в файл`);
+            console.log(`Пользователь ${user.userName} успешно зарегистрирован и записан в файл. \n Текущие пользователи: \n${usersData}`);
         });
     });
 }
