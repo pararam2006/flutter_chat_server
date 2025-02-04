@@ -1,7 +1,8 @@
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-// var admin = require("firebase-admin");
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json');
+
+console.log('Initializing Firebase with service account:', serviceAccount);
 
 initializeApp({
   credential: cert(serviceAccount)
@@ -22,18 +23,16 @@ io.on('connection', (socket) => {
     
     socket.on('registerUser', async (user) => {
         try {
-            // Проверка, существует ли пользователь
+            console.log('Registering user:', user);
             const userDoc = await db.collection('users').doc(user.userName).get();
     
             if (userDoc.exists) {
-                // Если пользователь уже существует, отправьте сообщение об ошибке
                 const errMsg = `Пользователь ${user.userName} уже зарегистрирован`;
                 io.emit('err', errMsg);
                 console.log(errMsg);
-                return; // Завершите выполнение функции
+                return;
             }
     
-            // Если пользователь не существует, добавьте его в базу данных
             await db.collection('users').doc(user.userName).set({
                 email: user.email,
                 password: user.password             
