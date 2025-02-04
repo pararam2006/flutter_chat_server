@@ -25,9 +25,10 @@ function addUserToFile(user) {
             return;
         }
 
-        const userExists = usersData.users.some(existingUser => existingUser.userName === user.userName);
+        const userExists = usersData.users.some((existingUser) => {existingUser.userName === user.userName});
         if (userExists) {
             console.log(`Пользователь ${user.userName} уже зарегистрирован`);
+            console.log(`Текущие пользователи: \n${usersData}`)
             return;
         }
 
