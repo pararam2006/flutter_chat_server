@@ -1,7 +1,7 @@
+process.env.GOOGLE_APPLICATION_CREDENTIALS = './flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json'
 const admin = require('firebase-admin');
 const { initializeApp, cert, applicationDefault } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
-
 const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json');
 
 console.log('Initializing Firebase with service account:', serviceAccount);
