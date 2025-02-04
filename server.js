@@ -13,7 +13,6 @@ const { Socket } = require('dgram');
 const http = require('http');
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
 const socketIo = require('socket.io');
 const server = http.createServer(express());
 const io = socketIo(server);
@@ -49,8 +48,16 @@ io.on('connection', (socket) => {
 
     console.log('Пользователь присоединился');
 
-    socket.on('first', () => {
+    socket.on('first', async () => {
         console.log('first');
+        try {
+            const docRef = db.collection('test').doc('testDoc');
+            await docRef.set({ test: 'test' });
+            console.log('Запись без регистрации работает');
+        } 
+        catch (err){
+            console.log(`Ошибка при записи данных: ${err}`)
+        }
         io.emit('response', 'Нажата первая кнопка');
     });
 
