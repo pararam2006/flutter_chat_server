@@ -17,24 +17,24 @@ const dbConfig = {
     database: 'freedb_flutter-chat-db' 
 }
 
+const pool = mysql.createPool(dbConfig);
+
 async function addUserToDatabase(user) {
-    const connection = await mysql.createConnection(dbConfig)
     try {
-        const [rows] = await connection.execute('select * from users where userName = ?', [user.userName])
+        const [rows] = await pool.execute('SELECT * FROM users WHERE userName = ?', [user.userName]);
         if (rows.length > 0) {
-            console.log(`Пользователь ${user.userName} уже зарегистрирован.`)
-            return
+            console.log(`Пользователь ${user.userName} уже зарегистрирован.`);
+            return;
         }
 
-        await connection.execute('insert into users (userName, email, password) VALUES (?, ?, ?)', 
-            [user.userName, user.email, user.password])
-        console.log(`Пользователь ${user.userName} успешно зарегистрирован.`)
+        await pool.execute('INSERT INTO users (userName, email, password) VALUES (?, ?, ?)', 
+            [user.userName, user.email, user.password]);
+        console.log(`Пользователь ${user.userName} успешно зарегистрирован.`);
     } catch (error) {
-        console.error('Ошибка при работе с базой данных:', error)
-    } finally {
-        await connection.end() 
+        console.error('Ошибка при работе с базой данных:', error);
     }
 }
+
 
 io.on('connection', (socket) => {
     console.log('Пользователь присоединился')
