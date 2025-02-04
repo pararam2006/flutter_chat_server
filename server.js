@@ -48,10 +48,10 @@ io.on('connection', (socket) => {
 
     socket.on('first', ()=>{
         const filePath = path.join(__dirname, 'users.json');
-        if (err) {
-            console.error('Ошибка при чтении файла:', err);
-            return;
-        }
+        // if (err) {
+        //     console.error('Ошибка при чтении файла:', err);
+        //     return;
+        // }
         let usersData;
         try {
             usersData = JSON.parse(data);
