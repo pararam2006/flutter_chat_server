@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const { initializeApp, cert } = require('firebase-admin/app');
+const { initializeApp, cert, applicationDefault } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 
 const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json');
@@ -7,7 +7,8 @@ const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f
 console.log('Initializing Firebase with service account:', serviceAccount);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+//   credential: admin.credential.cert(serviceAccount)
+    credential: applicationDefault()
 });
 
 const db = getFirestore();
