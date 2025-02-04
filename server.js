@@ -1,7 +1,7 @@
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-var admin = require("firebase-admin");
-const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json');
+const { initializeApp, applicationDefault, cert } = import('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue, Filter } = import('firebase-admin/firestore');
+var admin = import("firebase-admin");
+const serviceAccount = import('./flutter-sockets-firebase-adminsdk-fbsvc-67d88f4a99.json');
 
 console.log('Initializing Firebase with service account:', serviceAccount);
 
