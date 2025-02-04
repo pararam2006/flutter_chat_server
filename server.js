@@ -1,76 +1,54 @@
-const fs = require('fs');
-const path = require('path');
-const { Socket } = require('dgram');
-const http = require('http');
-const express = require('express');
-const socketIo = require('socket.io');
+const fs = require('fs')
+const path = require('path')
+const http = require('http')
+const express = require('express')
+const socketIo = require('socket.io')
+const mysql = require('mysql2/promise') 
+const app = express()
+const server = http.createServer(app)
+const io = socketIo(server)
+const PORT = 10000
 
-const server = http.createServer(express());
-const io = socketIo(server);
+const dbConfig = {
+    host: 'sql.freedb.tech',
+    port: 3306,
+    user: 'freedb_bebebe',
+    password: '4Fn#Wz3PV8XCG**',
+    database: 'freedb_flutter-chat-db' 
+}
 
-function addUserToFile(user) {
-    const filePath = path.join(__dirname, 'users.json');
-
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Ошибка при чтении файла:', err);
-            return;
+async function addUserToDatabase(user) {
+    const connection = await mysql.createConnection(dbConfig)
+    try {
+        const [rows] = await connection.execute('select * from users where userName = ?', [user.userName])
+        if (rows.length > 0) {
+            console.log(`Пользователь ${user.userName} уже зарегистрирован.`)
+            return
         }
 
-        let usersData;
-        try {
-            usersData = JSON.parse(data);
-        } catch (parseErr) {
-            console.error('Ошибка при парсинге JSON:', parseErr);
-            return;
-        }
-
-        const userExists = usersData.users.some((existingUser) => {existingUser.userName === user.userName});
-        if (userExists) {
-            console.log(`Пользователь ${user.userName} уже зарегистрирован. \n Текущие пользователи: \n${usersData}`);
-            return;
-        }
-
-        usersData.users.push(user);
-
-        fs.writeFile(filePath, JSON.stringify(usersData, null, 2), 'utf8', (writeErr) => {
-            if (writeErr) {
-                console.error('Ошибка при записи в файл:', writeErr);
-                return;
-            }
-            console.log(`Пользователь ${user.userName} успешно зарегистрирован и записан в файл. \n Текущие пользователи: \n${usersData}`);
-        });
-    });
+        await connection.execute('insert into users (userName, email, password) VALUES (?, ?, ?)', 
+            [user.userName, user.email, user.password])
+        console.log(`Пользователь ${user.userName} успешно зарегистрирован.`)
+    } catch (error) {
+        console.error('Ошибка при работе с базой данных:', error)
+    } finally {
+        await connection.end() 
+    }
 }
 
 io.on('connection', (socket) => {
-    console.log('Пользователь присоединился');
+    console.log('Пользователь присоединился')
 
-    socket.on('first', ()=>{
-        const filePath = path.join(__dirname, 'users.json');
-        // if (err) {
-        //     console.error('Ошибка при чтении файла:', err);
-        //     return;
-        // }
-        let usersData;
-        try {
-            usersData = JSON.parse(data);
-            console.log(`Текущие пользователи в файле: ${usersData}`)
-        } catch (parseErr) {
-            console.error('Ошибка при парсинге JSON:', parseErr);
-            return;
-        }
-        
-    });
-
-    socket.on('registerUser', (user) => {
-        console.log('Registering user:', user);
-        addUserToFile(user);
-    });
+    socket.on('registerUser', async (user) => {
+        console.log('Регистрация пользователя:', user)
+        await addUserToDatabase(user) 
+    })
 
     socket.on('disconnect', () => {
-        console.log('Пользователь отсоединился');
-    });
-});
+        console.log('Пользователь отсоединился')
+    })
+})
 
-server.listen(10000, () => {console.log('Сервер работает на https://flutter-chat-server-q7ne.onrender.com:10000')})
+server.listen(PORT, () => {
+    console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com:${PORT}`)
+})
