@@ -1,17 +1,17 @@
-// process.env.GOOGLE_APPLICATION_CREDENTIALS = './google-services.json'
-// const admin = require('firebase-admin');
-// const { initializeApp, cert, applicationDefault } = require('firebase-admin/app');
-// const { getFirestore } = require('firebase-admin/firestore');
-// const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-47cb93817a.json');
+process.env.GOOGLE_APPLICATION_CREDENTIALS = './google-services.json'
+const admin = require('firebase-admin');
+const { initializeApp, cert, applicationDefault } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
+const serviceAccount = require('./flutter-sockets-firebase-adminsdk-fbsvc-47cb93817a.json');
 
-// console.log('Initializing Firebase with service account:', serviceAccount);
+console.log('Initializing Firebase with service account:', serviceAccount);
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-//     // credential: applicationDefault()
-// });
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+    // credential: applicationDefault()
+});
 
-// const db = getFirestore();
+const db = getFirestore();
 const { Socket } = require('dgram');
 const http = require('http');
 const express = require('express');
@@ -25,28 +25,28 @@ io.on('connection', (socket) => {
     
     socket.on('registerUser', async (user) => {
         console.log(`${user.userName}, ${user.email}, ${user.password}`)
-        // try {
-        //     console.log('Registering user:', user);
-        //     const userDoc = await db.collection('users').doc(user.userName).get();
+        try {
+            console.log('Registering user:', user);
+            const userDoc = await db.collection('users').doc(user.userName).get();
     
-        //     if (userDoc.exists) {
-        //         const errMsg = `Пользователь ${user.userName} уже зарегистрирован`;
-        //         io.emit('err', errMsg);
-        //         console.log(errMsg);
-        //         return;
-        //     }
+            if (userDoc.exists) {
+                const errMsg = `Пользователь ${user.userName} уже зарегистрирован`;
+                io.emit('err', errMsg);
+                console.log(errMsg);
+                return;
+            }
     
-        //     await db.collection('users').doc(user.userName).set({
-        //         email: user.email,
-        //         password: user.password             
-        //     });
-        //     console.log(`Пользователь ${user.userName} зарегистрирован`);
-        // } 
-        // catch(err) {
-        //     const errMsg = `Ошибка при регистрации: ${err}`;
-        //     io.emit('err', errMsg);
-        //     console.log(errMsg);
-        // }
+            await db.collection('users').doc(user.userName).set({
+                email: user.email,
+                password: user.password             
+            });
+            console.log(`Пользователь ${user.userName} зарегистрирован`);
+        } 
+        catch(err) {
+            const errMsg = `Ошибка при регистрации: ${err}`;
+            io.emit('err', errMsg);
+            console.log(errMsg);
+        }
     });
     
     socket.on('first', async () => {
