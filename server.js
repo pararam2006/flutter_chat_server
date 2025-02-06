@@ -1,4 +1,4 @@
-process.env.GOOGLE_APPLICATION_CREDENTIALS = './flutter-sockets-firebase-adminsdk-fbsvc-47cb93817a.json'
+process.env.GOOGLE_APPLICATION_CREDENTIALS = './google-services.json'
 const admin = require('firebase-admin');
 const { initializeApp, cert, applicationDefault } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
@@ -62,15 +62,15 @@ io.on('connection', (socket) => {
 
     socket.on('first', async () => {
         console.log('first');
-        try {
-            const docRef = db.collection('test').doc('testDoc');
-            await docRef.set({ test: 'test' });
-            console.log('Запись без регистрации работает');
-        } 
-        catch (err){
-            console.log(`Ошибка при записи данных: ${err}`)
-        }
-        io.emit('response', 'Нажата первая кнопка');
+        // try {
+        //     const docRef = db.collection('test').doc('testDoc');
+        //     await docRef.set({ test: 'test' });
+        //     console.log('Запись без регистрации работает');
+        // } 
+        // catch (err){
+        //     console.log(`Ошибка при записи данных: ${err}`)
+        // }
+        // io.emit('response', 'Нажата первая кнопка');
     });
 
     socket.on('second', () => {
@@ -83,4 +83,4 @@ io.on('connection', (socket) => {
     });
 })
 
-server.listen(3000, () => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com`)});
+server.listen(3000, () => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com:3000`)});
