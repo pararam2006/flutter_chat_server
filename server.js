@@ -24,6 +24,7 @@ io.on('connection', (socket) => {
     console.log('Пользователь присоединился');
     
     socket.on('registerUser', async (user) => {
+        console.log(`${user.userName}, ${user.email}, ${user.password}`)
         // try {
         //     console.log('Registering user:', user);
         //     const userDoc = await db.collection('users').doc(user.userName).get();
@@ -46,7 +47,6 @@ io.on('connection', (socket) => {
         //     io.emit('err', errMsg);
         //     console.log(errMsg);
         // }
-        console.log(`${user.userName}, ${user.email}, ${user.password}`)
     });
     
     socket.on('first', async () => {
@@ -64,4 +64,4 @@ io.on('connection', (socket) => {
     });
 })
 
-server.listen(3000, () => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com:3000`)});
+server.listen(() => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com`)});
