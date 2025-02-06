@@ -24,29 +24,29 @@ io.on('connection', (socket) => {
     console.log('Пользователь присоединился');
     
     socket.on('registerUser', async (user) => {
-        // console.log(`${user.userName}, ${user.email}, ${user.password}`)
-        try {
-            console.log('Registering user:', user);
-            const userDoc = await db.collection('users').doc(user.userName).get();
+        console.log(`${user.userName}, ${user.email}, ${user.password}`)
+        // try {
+        //     console.log('Registering user:', user);
+        //     const userDoc = await db.collection('users').doc(user.userName).get();
     
-            if (userDoc.exists) {
-                const errMsg = `Пользователь ${user.userName} уже зарегистрирован`;
-                io.emit('err', errMsg);
-                console.log(errMsg);
-                return;
-            }
+        //     if (userDoc.exists) {
+        //         const errMsg = `Пользователь ${user.userName} уже зарегистрирован`;
+        //         io.emit('err', errMsg);
+        //         console.log(errMsg);
+        //         return;
+        //     }
     
-            await db.collection('users').doc(user.userName).set({
-                email: user.email,
-                password: user.password             
-            });
-            console.log(`Пользователь ${user.userName} зарегистрирован`);
-        } 
-        catch(err) {
-            const errMsg = `Ошибка при регистрации: ${err}`;
-            io.emit('err', errMsg);
-            console.log(errMsg);
-        }
+        //     await db.collection('users').doc(user.userName).set({
+        //         email: user.email,
+        //         password: user.password             
+        //     });
+        //     console.log(`Пользователь ${user.userName} зарегистрирован`);
+        // } 
+        // catch(err) {
+        //     const errMsg = `Ошибка при регистрации: ${err}`;
+        //     io.emit('err', errMsg);
+        //     console.log(errMsg);
+        // }
     });
     
     socket.on('first', async () => {
