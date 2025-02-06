@@ -24,7 +24,7 @@ io.on('connection', (socket) => {
     console.log('Пользователь присоединился');
     
     socket.on('registerUser', async (user) => {
-        console.log(`${user.userName}, ${user.email}, ${user.password}`)
+        // console.log(`${user.userName}, ${user.email}, ${user.password}`)
         try {
             console.log('Registering user:', user);
             const userDoc = await db.collection('users').doc(user.userName).get();
