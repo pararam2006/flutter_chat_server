@@ -34,13 +34,14 @@ io.on('connection', (socket) => {
                 io.emit('err', errMsg);
                 console.log(errMsg);
                 return;
-            }
+            } else {
     
-            await db.collection('users').doc(user.userName).set({
-                email: user.email,
-                password: user.password             
-            });
-            console.log(`Пользователь ${user.userName} зарегистрирован`);
+                await db.collection('users').doc(user.userName).set({
+                    email: user.email,
+                    password: user.password             
+                });
+                console.log(`Пользователь ${user.userName} зарегистрирован`);
+            }
         } 
         catch(err) {
             const errMsg = `Ошибка при регистрации: ${err}`;
@@ -65,3 +66,4 @@ io.on('connection', (socket) => {
 })
 
 server.listen(() => {console.log(`Сервер работает на https://flutter-chat-server-q7ne.onrender.com`)});
+// server.listen(() => {console.log(`Сервер работает на https://localhost`)});
